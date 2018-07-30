@@ -14,7 +14,7 @@ void main()
 {
 	
 	// if node id is invalid then set red color to the created bounding boxes
-	if (node_id >= num_val_nodes) // remove the if and you ll get crash with official driver releases since 397.31 (newest to date tested either)
+	if (node_id >= num_val_nodes) // remove the if and you ll get crash with official driver releases since 397.31 and before 397.64
 	{	
 		color = vec3(1,0,0);
 	}

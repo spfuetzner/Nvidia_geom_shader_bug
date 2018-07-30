@@ -15,6 +15,9 @@
 	Please take a look at the geomertry shader and fragment shader, especially at the layout (location = 0) in flat uint node_id; and 
 	the if in the fragment shader. 
 
+	if no bug visible (may occur on top graphic cards (like NVIDIA GTX 1080 ti), please increase the num of bounding boxes
+	To do so go to the line 932 and change the value of num_iterations to 1000 for example;
+
 	Thanks in advance!
 */
 #define NOMINMAX
@@ -175,8 +178,8 @@ private:
 	void copyBuffer(const Buffer& src,const Buffer& dst, vk::ArrayProxy<const vk::BufferCopy> copy_regions);
 private:
 	Window* m_window;
-	uint32_t m_width = 1280;
-	uint32_t m_height = 720;
+	uint32_t m_width = 1920;
+	uint32_t m_height = 1080;
 
 	// Tweaker
 	const vk::Format m_swapchain_format = vk::Format::eB8G8R8A8Unorm;
@@ -471,7 +474,6 @@ void Scene::initializeDevice()
 	std::vector<const char*> extensions;
 
 	extensions.push_back(VK_KHR_SWAPCHAIN_EXTENSION_NAME);
-	extensions.push_back(VK_EXT_DEBUG_MARKER_EXTENSION_NAME);
 
 	dev_ci.enabledExtensionCount = (uint32_t)extensions.size();
 	dev_ci.ppEnabledExtensionNames = extensions.data();
@@ -926,9 +928,12 @@ void Scene::createGeomAndMatrices()
 
 	// Create Few Bounding boxes to be used as storage buffer in vertex shader
 	// as input to geometry shader
-	for (uint32_t i = 0;i < 11;++i)
+	// If no error visible increase the value of num_iterations variable (maybe to 1000)
+	const uint32_t num_iterations = 1000;
+
+	for (uint32_t i = 0;i < num_iterations;++i)
 	{
-		for (uint32_t j = 0;j < 11;++j)
+		for (uint32_t j = 0;j < num_iterations;++j)
 		{
 			trf = glm::translate(glm::mat4(1.0f), glm::vec3((radius.x + rad_size * 2.0f) * j, (radius.x + rad_size* 2.0f) * i, -18.0));
 			glm::vec4 result = trf * center;
